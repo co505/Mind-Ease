@@ -3,5 +3,5 @@ package MindEase.MindEase.Users;
 
 
 
-public class Client {
+public class Client extends User {
 }
