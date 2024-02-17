@@ -3,14 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>Login.</title>
+    <link th:href="@{/styles/general.css}" rel="stylesheet"/>
 </head>
 <body>
-    <form method="post" th:action="@{/login}">
-        <div><label> User Name : <input name="username" type="text"/>
-        </label></div>
-        <div><label> Password: <input name="password" type="password"/>
-        </label></div>
-        <div><input type="submit" value="Sign In"/></div>
+    <h1> Custom form! </h1>
+    <form th:action="@{/authentication}" id="loginForm" method="POST">
+
+        <!-- Error message -->
+        <div th:if="${param.error}">
+            <i> Error </i>
+        </div>
+
+        <label>
+            User Name : <input name="username" type="text"/>
+        </label>
+
+        <label>
+            Password: <input name="password" type="password"/>
+        </label>
+
+        <input type="submit" value="Login"/>
     </form>
 </body>
 </html>

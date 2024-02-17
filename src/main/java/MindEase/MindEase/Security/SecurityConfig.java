@@ -13,34 +13,46 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    public static final String[] ENDPOINTS_WHITELIST = {
-            "/images/**",
-            "/",
-            "/order/**"
-    };
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws
-            Exception {
-        http
-                .authorizeHttpRequests(request -> request
-                        .requestMatchers(ENDPOINTS_WHITELIST).permitAll()
-                        .anyRequest().authenticated())
-                .csrf(csrf -> csrf.disable())
-                .formLogin(form -> form
-                        .loginPage("/login").
-                        permitAll()
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        // Referencing custom login form.
+        http.authorizeHttpRequests(configurer ->
+                configurer
+                        .anyRequest()
+                        .authenticated()
+        )
+                .formLogin(form ->
+                        form
+                                .loginPage("/login")
+                                .loginProcessingUrl("/authentication")
+                                .permitAll()
                 );
         return http.build();
     }
+
     @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails user =
-                User.withDefaultPasswordEncoder()
-                        .username("user")
-                        .password("password")
-                        .roles("USER")
-                        .build();
-        return new InMemoryUserDetailsManager(user);
+    public InMemoryUserDetailsManager userDetailsManager(){
+        // In memory storage of 3 different user accounts.
+        UserDetails john = User.builder()
+                .username("John")
+                .password("{noop}test123")
+                .roles("USER")
+                .build();
+
+        UserDetails suse = User.builder()
+                .username("Susan")
+                .password("{noop}pass123")
+                .roles("USER", "THERAPIST")
+                .build();
+
+        UserDetails david = User.builder()
+                .username("David")
+                .password("{noop}dave123")
+                .roles("USER", "THERAPIST", "ADMIN")
+                .build();
+
+        return  new InMemoryUserDetailsManager(john, suse, david);
     }
 }
 
