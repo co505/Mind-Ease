@@ -13,34 +13,33 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    public static final String[] ENDPOINTS_WHITELIST = {
-            "/images/**",
-            "/",
-            "/order/**"
-    };
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws
-            Exception {
-        http
-                .authorizeHttpRequests(request -> request
-                        .requestMatchers(ENDPOINTS_WHITELIST).permitAll()
-                        .anyRequest().authenticated())
-                .csrf(csrf -> csrf.disable())
-                .formLogin(form -> form
-                        .loginPage("/login").
-                        permitAll()
-                );
-        return http.build();
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
+        httpSecurity.authorizeHttpRequests(configurer )
     }
+
     @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails user =
-                User.withDefaultPasswordEncoder()
-                        .username("user")
-                        .password("password")
-                        .roles("USER")
-                        .build();
-        return new InMemoryUserDetailsManager(user);
+    public InMemoryUserDetailsManager userDetailsManager(){
+        UserDetails john = User.builder()
+                .username("John")
+                .password("{noop}test123")
+                .roles("USER")
+                .build();
+
+        UserDetails suse = User.builder()
+                .username("Susan")
+                .password("{noop}pass123")
+                .roles("USER", "THERAPIST")
+                .build();
+
+        UserDetails david = User.builder()
+                .username("David")
+                .password("{noop}dave123")
+                .roles("USER", "THERAPIST", "ADMIN")
+                .build();
+
+        return  new InMemoryUserDetailsManager(john, suse, david);
     }
 }
 
