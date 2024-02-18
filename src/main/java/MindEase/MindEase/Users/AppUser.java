@@ -6,6 +6,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 
 public class AppUser implements UserDetails {
+    private int id;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String password;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null; // Returns privileges.

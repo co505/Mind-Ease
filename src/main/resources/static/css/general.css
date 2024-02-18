@@ -5,3 +5,7 @@ body {
     background-color: aqua;
     color: blueviolet;
 }
+
+.error{
+    color: red;
+}
