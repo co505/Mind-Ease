@@ -2,6 +2,6 @@ package MindEase.MindEase.Users;
 
 
 
-public class Therapist extends User {
+public class Therapist extends AppUser {
 
 }
