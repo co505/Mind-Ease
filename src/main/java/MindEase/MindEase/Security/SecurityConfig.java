@@ -16,18 +16,21 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        // Referencing custom login form.
+        // Detection of unauthenticated requests.
         http.authorizeHttpRequests(configurer ->
                 configurer
                         .anyRequest()
                         .authenticated()
-        )
+        )       // Handling of login-form.
                 .formLogin(form ->
                         form
                                 .loginPage("/login")
                                 .loginProcessingUrl("/authentication")
+                                .defaultSuccessUrl("/", true)
                                 .permitAll()
-                );
+
+//                .logout(logout -> )
+    );
         return http.build();
     }
 
